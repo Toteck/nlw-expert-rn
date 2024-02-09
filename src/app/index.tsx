@@ -1,28 +1,23 @@
-// Nós iremos precisar do useRef para poder manipular essa lista diretamente
 import { useState, useRef } from "react";
-
+import { Link } from "expo-router";
 import { Header } from "@/components/header";
 import { View, Text, FlatList, SectionList } from "react-native";
 import { CategoryButton } from "@/components/category-button";
 import { Product } from "@/components/product";
 
-// Vamos importar aqui também o MENU
 import { CATEGORIES, MENU } from "@/utils/data/products";
 
 export default function Home() {
   const [category, setCategory] = useState(CATEGORIES[0]);
 
-  // Novo: Iremos aplicar o scroll aqui dentro dessa função aqui dentro já estamos selecionando a categoria
-  // Novo: eu define o tipo para SectionList e o valor inicial é null
   const sectionListRef = useRef<SectionList>(null);
   function handleCategorySelect(selectedCategory: string) {
     setCategory(selectedCategory);
-    // novo
+
     const sectionIndex = CATEGORIES.findIndex(
       (category) => category === selectedCategory
     );
 
-    // Novo
     if (sectionListRef.current) {
       sectionListRef.current.scrollToLocation({
         animated: true,
@@ -56,7 +51,11 @@ export default function Home() {
         sections={MENU}
         keyExtractor={(item) => item.id}
         stickySectionHeadersEnabled={false}
-        renderItem={({ item }) => <Product data={item} />}
+        renderItem={({ item }) => (
+          <Link href={`/product/${item.id}`} asChild>
+            <Product data={item} />
+          </Link>
+        )}
         renderSectionHeader={({ section: { title } }) => (
           <Text className="text-xl text-white font-heading mt-8 mb-3">
             {title}
