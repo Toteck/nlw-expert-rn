@@ -4,13 +4,21 @@ import { Header } from "@/components/header";
 import { View, Text, FlatList, SectionList } from "react-native";
 import { CategoryButton } from "@/components/category-button";
 import { Product } from "@/components/product";
-
+import { useCartStore } from "@/stores/cart-store";
 import { CATEGORIES, MENU } from "@/utils/data/products";
 
 export default function Home() {
+  const cartStore = useCartStore();
   const [category, setCategory] = useState(CATEGORIES[0]);
 
   const sectionListRef = useRef<SectionList>(null);
+
+  // Para mim poder contar quantos produtos tem eu preciso contar quantos produtos tem de cada produto e somar tudo
+  const cartQuantityItems = cartStore.products.reduce(
+    (total, product) => total + product.quantity,
+    0
+  );
+
   function handleCategorySelect(selectedCategory: string) {
     setCategory(selectedCategory);
 
@@ -29,7 +37,7 @@ export default function Home() {
 
   return (
     <View className="flex-1 pt-8">
-      <Header title="Faça o seu pedido" cartQuantityItems={5} />
+      <Header title="Faça o seu pedido" cartQuantityItems={cartQuantityItems} />
       <FlatList
         data={CATEGORIES}
         keyExtractor={(item) => item}

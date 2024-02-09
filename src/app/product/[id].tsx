@@ -4,11 +4,21 @@ import { PRODUCTS } from "@/utils/data/products";
 import { formatCurrency } from "@/utils/functions/format-currency";
 import { Button } from "@/components/button";
 import { Feather } from "@expo/vector-icons";
+import { LinkButton } from "@/components/link-button";
+
+import { useCartStore } from "@/stores/cart-store"; // Novo
 
 // Aqui basicamente iremos testar se o id está sendo encontrado aí nós mostramos o id
 export default function Product() {
+  // Deixar os hooks que começam com use no começo
   const { id } = useLocalSearchParams();
+  const cartStore = useCartStore(); // Novo
+
   const product = PRODUCTS.filter((item) => item.id === id)[0];
+
+  function handleAddToCart() {
+    cartStore.add(product);
+  }
 
   return (
     <View className="flex-1 border-solid border-2 border-red-600">
@@ -35,12 +45,13 @@ export default function Product() {
       </View>
 
       <View className="p-5 pb-8 gap-5 ">
-        <Button>
+        <Button onPress={handleAddToCart}>
           <Button.Icon>
             <Feather name="plus-circle" size={20} />
           </Button.Icon>
           <Button.Text>Adicionar ao pedido</Button.Text>
         </Button>
+        <LinkButton title="Voltar ao cardápio" href="/" />
       </View>
     </View>
   );
