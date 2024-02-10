@@ -17,3 +17,16 @@ export function add(products: ProductCartProps[], newProduct: ProductProps) {
   // Caso o produto não exista então retornamos todos os produtos que já estão selecionados e juntos esse novo produto.
   return [...products, { ...newProduct, quantity: 1 }];
 }
+
+export function remove(products: ProductCartProps[], productRemoveId: string) {
+  const updatedProducts = products.map((product) =>
+    product.id === productRemoveId
+      ? {
+          ...product,
+          quantity: product.quantity > 1 ? product.quantity - 1 : 0,
+        }
+      : product
+  );
+
+  return updatedProducts.filter((product) => product.quantity > 0);
+}
