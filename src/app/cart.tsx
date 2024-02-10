@@ -43,12 +43,24 @@ export default function Cart() {
     );
   }
 
-  // Primeiro verificar se o usuário digitou um endereço
   function handleOrder() {
-    // Se igual a zero o usuário não digitou nada e tá tentando envia o pedido
     if (address.trim().length === 0) {
       return Alert.alert("Pedido", "Informe os dados da entrega.");
     }
+
+    const products = cartStore.products
+      .map((product) => `\n ${product.quantity} ${product.title}`)
+      .join("");
+
+    const message = `
+ 🍔 NOVO PEDIDO
+    \n Entregar em: ${address}
+
+    ${products}
+
+    \n Valor total: ${total}
+    `;
+    console.log(message);
   }
 
   return (
